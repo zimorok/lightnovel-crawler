@@ -75,8 +75,6 @@ def fetch_chapter_body(app):
             pack_by_volume=app.pack_by_volume,
             output_path=app.output_path,
         )
-        if not os.path.exists(file_name):
-            continue
         try:
             with open(file_name, "r", encoding="utf-8") as file:
                 old_chapter = json.load(file)
@@ -84,7 +82,7 @@ def fetch_chapter_body(app):
         except FileNotFoundError:
             print("File not found!")
         except json.JSONDecodeError:
-            print("Unable to decode JSON from the file!")
+            print("Unable to decode JSON from the file: %s" % (file_name))
         except Exception as e:
             print("An error occurred while reading the file:", e)
 
