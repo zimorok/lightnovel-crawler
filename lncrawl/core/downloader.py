@@ -77,9 +77,17 @@ def fetch_chapter_body(app):
         )
         if not os.path.exists(file_name):
             continue
-        with open(file_name, "r", encoding="utf-8") as file:
-            old_chapter = json.load(file)
-            chapter.update(**old_chapter)
+        try:
+            with open(file_name, "r", encoding="utf-8") as file:
+                old_chapter = json.load(file)
+                chapter.update(**old_chapter)
+        except FileNotFoundError:
+            print("File not found!")
+        except json.JSONDecodeError:
+            print("Unable to decode JSON from the file!")
+        except Exception as e:
+            print("An error occurred while reading the file:", e)
+
         if chapter.success:
             logger.debug(f"Restored chapter {chapter.id} from {file_name}")
 
